@@ -20,6 +20,7 @@ namespace WebApplication10.Models
             cmd.Connection = con;
             cmd.CommandType = CommandType.StoredProcedure;
         }
+        //bye
         public List<student> GetStudents(int? Sid, bool? Status)
         {
             List<student> students = new List<student>();
