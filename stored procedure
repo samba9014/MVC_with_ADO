@@ -1,0 +1,115 @@
+stored procedure
+
+//add student
+USE [student]
+GO
+/****** Object:  StoredProcedure [dbo].[Student_Insert]    Script Date: 1/21/2025 6:03:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[Student_Insert]
+    @Sid INT,
+    @Name NVARCHAR(100),
+    @Class NVARCHAR(50),
+    @Fees DECIMAL(18, 2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        INSERT INTO Students (Sid, Name, Class, Fees)
+        VALUES (@Sid, @Name, @Class, @Fees);
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+        THROW;
+    END CATCH
+END;
+
+
+
+
+//update student
+USE [student]
+GO
+/****** Object:  StoredProcedure [dbo].[Student_Update]    Script Date: 1/21/2025 6:02:10 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[Student_Update]
+    @Sid INT,
+    @Name NVARCHAR(100),
+    @Fees DECIMAL(18, 2)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        UPDATE Students
+        SET Name = @Name,
+            Fees = @Fees
+        WHERE Sid = @Sid;
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+        THROW;
+    END CATCH
+END;
+
+
+
+//delete student
+
+USE [student]
+GO
+/****** Object:  StoredProcedure [dbo].[Student_Delete]    Script Date: 1/21/2025 6:04:18 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[Student_Delete]
+    @Sid INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        DELETE FROM Students
+        WHERE Sid = @Sid;
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+
+    END CATCH
+END;
+
+
+
+//select student
+
+USE [student]
+GO
+/****** Object:  StoredProcedure [dbo].[student_Select1]    Script Date: 1/21/2025 6:03:01 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE  [dbo].[student_Select1] 
+	-- Add the parameters for the stored procedure here
+	 
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	SELECT *  FROM Students;
+END
