@@ -21,22 +21,22 @@ namespace WebApplication10.Models
             cmd.CommandType = CommandType.StoredProcedure;
         }
         //bye
-        public List<student> GetStudents(int? Sid, bool? Status)
+        public List<student> GetStudents()
         {
             List<student> students = new List<student>();
             try
             {
                 cmd.Parameters.Clear();
-                cmd.CommandText = "student_Select";
-                if (Sid != null && Status != null)
-                {
-                    cmd.Parameters.AddWithValue("@Sid", Sid);
-                    cmd.Parameters.AddWithValue("@Status", Status);
-                }
-                else if (Sid != null && Status == null)
-                    cmd.Parameters.AddWithValue("@Sid", Sid);
-                else if (Sid == null && Status != null)
-                    cmd.Parameters.AddWithValue("@Status", Status);
+                cmd.CommandText = "student_Select1";
+                //if (Sid != null && Status != null)
+                //{
+                //    cmd.Parameters.AddWithValue("@Sid", Sid);
+                //    cmd.Parameters.AddWithValue("@Status", Status);
+                //}
+                //else if (Sid != null && Status == null)
+                //    cmd.Parameters.AddWithValue("@Sid", Sid);
+                //else if (Sid == null && Status != null)
+                //    cmd.Parameters.AddWithValue("@Status", Status);
                 con.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 while (dr.Read())
@@ -45,9 +45,10 @@ namespace WebApplication10.Models
                     {
                         Sid = (int)dr["Sid"],
                         Name = (string)dr["Name"],
-                        Class = (int)dr["Class"],
-                        Fees = (decimal)dr["Fees"],
-                        Photo = (string)dr["Photo"]
+                          // Corrected cast from int to string
+                        Fees = (decimal)dr["Fees"]
+
+                        //Photo = (string)dr["Photo"]
                     };
                     students.Add(student);
                 }
@@ -58,19 +59,57 @@ namespace WebApplication10.Models
             { con.Close(); }
             return students;
         }
+
+
+
+
+        //
+        public List<student> GetStudents(int Sid)
+        {
+            List<student> students = new List<student>();
+            try
+            {
+                cmd.Parameters.Clear();
+                cmd.CommandText = "student_Select1";
+                
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    student student = new student
+                    {
+                        Sid = (int)dr["Sid"],
+                        Name = (string)dr["Name"],
+                        // Corrected cast from int to string
+                        Fees = (decimal)dr["Fees"]
+
+                        //Photo = (string)dr["Photo"]
+                    };
+                    students.Add(student);
+                }
+            }
+            catch (Exception ex)
+            { throw ex; }
+            finally
+            { con.Close(); }
+            return students;
+        }
+
+
+
+
         public int InsertStudent(student student)
         {
             int Count = 0;
             try
             {
-                cmd.CommandText = "Student_Insert";
+                cmd.CommandText = "Student_Insert";//stored procedure
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@Sid", student.Sid);
                 cmd.Parameters.AddWithValue("@Name", student.Name);
                 cmd.Parameters.AddWithValue("@Class", student.Class);
                 cmd.Parameters.AddWithValue("@Fees", student.Fees);
-                if (student.Photo != null && student.Photo.Length != 0)
-                    cmd.Parameters.AddWithValue("@Photo", student.Photo);
+                
                 con.Open();
                 Count = cmd.ExecuteNonQuery();
             }
@@ -89,10 +128,7 @@ namespace WebApplication10.Models
                 cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@Sid", student.Sid);
                 cmd.Parameters.AddWithValue("@Name", student.Name);
-                cmd.Parameters.AddWithValue("@Class", student.Class);
                 cmd.Parameters.AddWithValue("@Fees", student.Fees);
-                if (student.Photo != null && student.Photo.Length != 0)
-                    cmd.Parameters.AddWithValue("@Photo", student.Photo);
                 con.Open();
                 Count = cmd.ExecuteNonQuery();
             }

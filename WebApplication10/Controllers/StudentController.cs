@@ -13,13 +13,14 @@ namespace WebApplication10.Controllers
     {
         // GET: Student
         StudentDAL obj = new StudentDAL();
+
+        //public ViewResult DisplayStudents(int Sid)
+        //{
+        //    return View(obj.GetStudents().Single());
+        //}
         public ViewResult DisplayStudents()
         {
-            return View(obj.GetStudents(null, true));
-        }
-        public ViewResult DisplayStudents(int Sid)
-        {
-            return View(obj.GetStudents(Sid, true).Single());
+            return View(obj.GetStudents());
         }
         public ViewResult AddStudent()
         {
@@ -44,26 +45,26 @@ namespace WebApplication10.Controllers
         }
         public ViewResult EditStudent(int Sid)
         {
-            student student = obj.GetStudents(Sid, true).Single();
-            TempData["Photo"] = student.Photo;
+            student student = obj.GetStudents(Sid).First();
+            
             return View();
         }
         public RedirectToRouteResult UpdateStudent(student student, HttpPostedFileBase selectedFile)
         {
-            if (selectedFile != null)
-            {
-                string PhysicalPath = Server.MapPath("~/Uploads/");
-                if (!Directory.Exists(PhysicalPath))
-                {
-                    Directory.CreateDirectory(PhysicalPath);
-                }
-                selectedFile.SaveAs(PhysicalPath + selectedFile.FileName);
-                student.Photo = selectedFile.FileName;
-            }
-            else
-            {
-                student.Photo = TempData["Photo"].ToString();
-            }
+            //if (selectedFile != null)
+            //{
+            //    string PhysicalPath = Server.MapPath("~/Uploads/");
+            //    if (!Directory.Exists(PhysicalPath))
+            //    {
+            //        Directory.CreateDirectory(PhysicalPath);
+            //    }
+            //    selectedFile.SaveAs(PhysicalPath + selectedFile.FileName);
+            //    student.Photo = selectedFile.FileName;
+            //}
+            //else
+            //{
+            //    student.Photo = TempData["Photo"].ToString();
+            //}
             obj.UpdateStudent(student);
             return RedirectToAction("DisplayStudents");
         }

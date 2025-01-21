@@ -1,12 +1,53 @@
-﻿@model WebApplication10.Models.student
+﻿@model IEnumerable<WebApplication10.Models.student>
 <h2 style="text-align:center;background-color:yellowgreen;color:orangered">Student Details</h2>
-<table border="1" align="center">
-    <tr>
-        <td rowspan=4><img src='~/Uploads/@Model.Photo' width="200" height="200" alt="No Image" /> </td>
-        <td>Sid: @Model.Sid</td>
-    </tr>
-    <tr><td>Name: @Model.Name</td></tr>
-    <tr><td>Class: @Model.Class</td></tr>
-    <tr><td>Fees: @Model.Fees</td></tr>
-    <tr><td colspan="2" align="center">@Html.ActionLink("Back to Student Details", "DisplayStudents")</td></tr>
+
+@*@foreach (var item in Model)
+{
+    <label>@item.Name</label>
+    <label>@item.Sid</label>
+    <label>@item.Fees</label>
+    <label>@item.Class</label><br />
+
+}*@
+
+
+<table class="table table-bordered table-condensed text-center">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Sid)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Name)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Fees)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(model => student.Sid)</td>
+                <td>@Html.DisplayFor(model => student.Name)</td>
+                <td>@Html.DisplayFor(model => student.Fees)</td>
+                <td>
+                    @Html.ActionLink("View", "DisplayStudent", new { Sid = student.Sid }, new { @class = "btn btn-info btn-sm" }) |
+                    @Html.ActionLink("Edit", "EditStudent", new { Sid = student.Sid }, new { @class = "btn btn-warning btn-sm" }) |
+                    @Html.ActionLink(
+                        "Delete",
+                        "DeleteStudent",
+                        new { Sid = student.Sid },
+                        new
+                        {
+                            @class = "btn btn-danger btn-sm",
+                            onclick = "return confirm('Are you sure you want to delete this record?');"
+                        })
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6">
+                @Html.ActionLink("Add New Student", "AddStudent", null, new { @class = "btn btn-success" })
+            </td>
+        </tr>
+    </tfoot>
 </table>
